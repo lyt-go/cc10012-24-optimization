@@ -8,7 +8,9 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
-    "typecheck": "vue-tsc --noEmit"
+    "typecheck": "vue-tsc --noEmit",
+    "verify:pivot": "esbuild scripts/verify-pivot.ts --bundle --platform=node --format=esm --outfile=.verify/pivot.mjs --alias:@=./src && node .verify/pivot.mjs",
+    "verify:pivot-service": "esbuild scripts/verify-pivot-service.ts --bundle --platform=node --format=esm --outfile=.verify/pivot-service.mjs --alias:@=./src && node .verify/pivot-service.mjs"
   },
   "dependencies": {
     "pinia": "^2.1.7",

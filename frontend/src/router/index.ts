@@ -13,6 +13,7 @@ const Schedulerjob = () => import('@/views/schedulerjob/index.vue')
 const Dataschema = () => import('@/views/dataschema/index.vue')
 const Queryopt = () => import('@/views/queryopt/index.vue')
 const Pivotable = () => import('@/views/pivotable/index.vue')
+const PivotWorkbench = () => import('@/views/pivotable/workbench.vue')
 const Datacompare = () => import('@/views/datacompare/index.vue')
 const Permission = () => import('@/views/permission/index.vue')
 const Taggroup = () => import('@/views/taggroup/index.vue')
@@ -35,6 +36,7 @@ const router = createRouter({
     { path: '/dataschema', name: 'dataschema', component: Dataschema },
     { path: '/queryopt', name: 'queryopt', component: Queryopt },
     { path: '/pivotable', name: 'pivotable', component: Pivotable },
+    { path: '/pivotable/workbench', name: 'pivot-workbench', component: PivotWorkbench },
     { path: '/datacompare', name: 'datacompare', component: Datacompare },
     { path: '/permission', name: 'permission', component: Permission },
     { path: '/taggroup', name: 'taggroup', component: Taggroup },

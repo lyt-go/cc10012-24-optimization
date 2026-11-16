@@ -3,10 +3,12 @@
     <header class="page-head">
       <div>
         <h2>透视分析管理</h2>
-        <p class="page-desc">管理数据透视分析配置，支持行列维度交叉和多种聚合计算。</p>
+        <p class="page-desc">
+          管理数据透视分析配置，支持行列维度交叉和多种聚合计算；配置改动后到工作台核验重算结果与汇总口径。
+        </p>
       </div>
       <div class="page-actions">
-        <button class="btn primary" type="button" @click="openCreate">登记透视配置</button>
+        <RouterLink class="btn primary" to="/pivotable/workbench">打开透视聚合工作台</RouterLink>
         <button class="btn" type="button" @click="exportRows">导出透视分析清单</button>
       </div>
     </header>
@@ -79,10 +81,11 @@ import {
   moduleMeta,
   runAction as applyAction,
 } from '@/api/local-service'
+import { syncDefinitionStatus } from '@/api/pivot-service'
 import type { EntryRow } from '@/data/types'
 
 const meta = moduleMeta('pivotable')
-const columns = ["配置编号", "数据来源", "行维度字段", "列维度字段", "值度量字段", "聚合函数", "汇总行开启", "空值显示"]
+const columns = ["配置编号", "数据来源", "行维度字段", "列维度字段", "值度量字段", "聚合函数", "汇总行开启", "空值显示", "配置版本"]
 const actions = ["提交配置评审", "保存配置", "删除配置"]
 const statuses = ["草稿", "配置评审中", "已保存", "已删除"]
 const stats = [{"label": "透视配置总数", "value": 0}, {"label": "已保存配置", "value": 0}, {"label": "评审中配置", "value": 0}]
@@ -108,10 +111,6 @@ function exportRows() {
   downloadEntries(meta.key)
 }
 
-function openCreate() {
-  errorMessage.value = '透视配置登记入口尚未接入审批流'
-}
-
 function runAction(action: string, row: EntryRow) {
   errorMessage.value = ''
   const result = applyAction(meta.key, Number(row.id), action)
@@ -119,6 +118,8 @@ function runAction(action: string, row: EntryRow) {
     errorMessage.value = result.message
     return
   }
+  // 状态流转只同步配置记录，不提升配置版本，因此不会触发聚合重算。
+  syncDefinitionStatus(String(row["配置编号"]), String(meta.actionTargets[action]))
   reload()
 }
 
